@@ -1,0 +1,908 @@
+CREATE DATABASE ddurnea;
+
+USE ddurnea;
+
+/*CREATE TABLE UNIVERSITATE
+(
+    UNIV_ID  INT NOT NULL,
+    UNIV_DEN VARCHAR(100),
+    RATING   FLOAT,
+    ORAS     VARCHAR(50),
+    PRIMARY KEY (UNIV_ID)
+);
+insert into UNIVERSITATE (UNIV_ID, UNIV_DEN, RATING, ORAS)
+values (22, 'USM', 606, 'Chisinau'),
+       (10, 'USB', 296, 'Balti'),
+       (11, 'ULIM', 345, 'Chisinau'),
+       (32, 'USC', 416, 'Cahul'),
+       (14, 'USD', 326, 'Drochia'),
+       (15, 'USC', 368, 'Chisinau'),
+       (18, 'ВГМА', 327, 'Balti');
+CREATE TABLE PROFESOR
+(
+    PR_ID   INT NOT NULL,
+    NUME    VARCHAR(50),
+    PRENUME VARCHAR(50),
+    ORAS    VARCHAR(50),
+    UNIV_ID INT NOT NULL,
+    PRIMARY KEY (PR_ID),
+    FOREIGN KEY (UNIV_ID) REFERENCES UNIVERSITATE (UNIV_ID)
+);
+select *
+from PROFESOR;
+select *
+from UNIVERSITATE;
+insert into PROFESOR (PR_ID, NUME, PRENUME, ORAS, UNIV_ID)
+values (24, 'Iordachi', 'Boris', 'Balti', 10),
+       (46, 'Nuca', 'Ion', 'Balti', 10),
+       (74, 'Lasescu', 'Pavel', 'Chisinau', 22),
+       (108, 'Stanescu', 'Nicolai', 'Chisinau', 22),
+       (276, 'Negrescu', 'Victor', 'Balti', 10),
+        (328, 'Sorescu', 'Andrei', 'Orhei', 10);*/
+/*CREATE TABLE CURS
+(
+    CURS_ID  INT NOT NULL,
+    CURS_DEN VARCHAR(100),
+    ORE      INT,
+    SEMESTRU INT,
+    PRIMARY KEY (CURS_ID)
+);
+insert into CURS (CURS_ID, CURS_DEN, ORE, SEMESTRU)
+values (10, 'Informatica', 56, 1),
+       (22, 'Fizica', 34, 1),
+       (43, 'Matematica', 56, 2),
+       (56,'Istoria', 34, 4),
+       (94,'Limba Engleza', 56, 3),
+       (73,'Educatia Fizica', 34, 5);
+select * from CURS*/
+/*CREATE TABLE STUDENT
+(
+    ST_ID   INT NOT NULL,
+    NUME    VARCHAR(50),
+    PRENUME VARCHAR(50),
+    BURSA   FLOAT,
+    ANUL    INT,
+    ORAS    VARCHAR(50),
+    DATA_N  DATE,
+    UNIV_ID INT,
+    PRIMARY KEY (ST_ID),
+    FOREIGN KEY (UNIV_ID) REFERENCES UNIVERSITATE (UNIV_ID)
+);
+insert into STUDENT (ST_ID, NUME, PRENUME, BURSA, ANUL, ORAS, DATA_N, UNIV_ID)
+VALUES (1, 'Popescu', 'Ion', 150, 1, 'Orhei', '1982/12/03', 10),
+       (3, 'Ionescu', 'Petru', 200, 3, 'Cahul', '1980/12/01', 10),
+       (6, 'Sima', 'Vadim', 150, 4, 'Chisinau', '1979/06/07', 22),
+       (10, 'Osman', 'Nicolai', 0, 2, 'Briceni', '1981/12/08', 10),
+       (12, 'Casta', 'Olga', 250, 2, 'Lipcani', '1981/05/01', 10),
+       (265, 'Mantes', 'Andrei', 0, 3, 'Balti', '1979/11/05', 10),
+       (32, 'Colesnic', 'Petru', 150, 5, 'Drochia', NULL, 14),
+       (654, 'Luca', 'Artur', 200, 3, 'Balti', '1981/12/01', 10),
+       (276, 'Petrescu', 'Elena', 200, 4, NULL, '1981/08/05', 22),
+       (55, 'Banescu', 'Vlad', 250, 5, 'Balti', '1980/01/07', 10);
+select * from STUDENT*/
+/*CREATE TABLE NOTE_EXAM
+(
+    EXAM_ID   INT,
+    ST_ID     INT,
+    CURS_ID   INT,
+    NOTA      FLOAT,
+    DATA_EXAM DATE,
+    PRIMARY KEY (EXAM_ID, ST_ID, CURS_ID),
+    FOREIGN KEY (ST_ID) REFERENCES STUDENT (ST_ID),
+    FOREIGN KEY (CURS_ID) REFERENCES CURS (CURS_ID)
+);
+
+insert into NOTE_EXAM (EXAM_ID, ST_ID, CURS_ID, NOTA, DATA_EXAM)
+values (145, 12, 10, 10, '2000/01/12'),
+       (34, 32, 10, 9, '2000/01/23'),
+       (75, 55, 10, 9, '2000/01/05'),
+       (238, 12, 22, 6, '1999/06/17'),
+       (639, 55, 22, NULL, '1999/06/22'),
+       (43, 6, 22, 5, '2000/01/18');*/
+/*CREATE TABLE CURS_PROF
+(
+    PR_ID   INT,
+    CURS_ID INT,
+    PRIMARY KEY (PR_ID, CURS_ID),
+    FOREIGN KEY (PR_ID) REFERENCES PROFESOR (PR_ID),
+    FOREIGN KEY (CURS_ID) REFERENCES CURS (CURS_ID)
+);
+insert into CURS_PROF (PR_ID, CURS_ID)
+VALUES (24,10),
+       (46,22),
+       (74,43),
+       (108,56),
+       (276,94),
+       (328,73);*/
+/*6Să se înscrie o instrucţiune care ar mări viteza de selectare a datelor despre studenţi după anul de studii.*/
+ALTER TABLE student
+  ADD INDEX idx_an_studiu (anul);
+
+/*7Să se definească un index care ar permite pentru fiecare student mai repede de regăsit notele obţinute de el grupate după data examinării.*/
+CREATE INDEX index_note_student_data ON note_exam (st_id, data_exam);
+
+/*8Să înscrie instrucţiunea care ar adăuga în tabela CURS o nouă înregistrare pentru un curs nou cu următoarele valori pentru cîmpuri: semestrul – 4; denumirea – Algebra; numărul de ore – 72; identificatorul – 201.*/
+INSERT INTO curs
+            (semestru,
+             curs_den,
+             ore,
+             curs_id)
+VALUES      (4,
+             'Algebra',
+             72,
+             201);
+
+/*9Să se adauge o înregistrare pentru un student nou pe care îl cheamă Osman Nicolai, care îşi face studiile la USB în anul I de studii şi care locuieşte în oraşul Bălţi, iar date despre data de naştere şi bursă nu se cunosc.*/
+INSERT INTO student
+            (st_id,
+             nume,
+             prenume,
+             bursa,
+             anul,
+             oras,
+             data_n,
+             univ_id)
+VALUES      (2,
+             'Osman',
+             'Nicolai',
+             NULL,
+             1,
+             'Balti',
+             NULL,
+             10);
+
+/*10Să se înscrie o instrucţiune pentru a elimina din tabela NOTE_EXAM toate înregistrările în care se păstrează notele studentului cu numărul de identificare egal cu 100.*/
+DELETE FROM note_exam
+WHERE  st_id = 100;
+
+/*11Să se înscrie o instrucţiune care ar mari reitingul universităţilor din Cahul cu 5.*/
+UPDATE universitate
+SET    rating = rating + 5
+WHERE  oras = 'Cahul';
+
+/*12Să se înscrie o instrucţiune care ar fi necesară în caz că Popescu se mută cu traiul în Bălţi.*/
+UPDATE student
+SET    oras = 'Bălţi'
+WHERE  nume = 'Popescu';
+
+CREATE TABLE studenti LIKE student;
+
+/*13Să se înscrie o instrucţiune care ar adăuga în tabelul STUDENTI (tabelul STUDENTI are aceeaşi structură ca şi STUDENT) datele despre toţi studenţii ce învaţă la Chişinău.*/
+INSERT INTO studenti
+            (st_id,
+             nume,
+             prenume,
+             bursa,
+             anul,
+             oras,
+             data_n,
+             univ_id)
+SELECT st_id,
+       nume,
+       prenume,
+       bursa,
+       anul,
+       oras,
+       data_n,
+       univ_id
+FROM   student
+WHERE  oras = 'Chisinau';
+
+/*14??????Să se înscrie o instrucţiune care ar adăuga în tabelul STUDENTI (tabelul STUDENTI are aceeaşi structură ca şi STUDENT) datele despre toţi studenţii ce au susţinut cu succes mai mult de 5 examene.*/
+INSERT INTO studenti
+            (st_id,
+             nume,
+             prenume,
+             bursa,
+             anul,
+             oras,
+             data_n,
+             univ_id)
+SELECT st_id,
+       nume,
+       prenume,
+       bursa,
+       anul,
+       oras,
+       data_n,
+       univ_id
+FROM   student
+WHERE  st_id IN (SELECT st_id
+                 FROM   note_exam
+                 WHERE  nota >= 5
+                 GROUP  BY st_id
+                 HAVING Count(DISTINCT curs_id) > 5);
+
+/*15Să se înscrie o instrucţiune care ar elimina din tabelul CURS acele cursuri la care nici un student nu a obţinut nici o notă.*/
+DELETE FROM curs
+WHERE  curs_id NOT IN (SELECT DISTINCT curs_id
+                       FROM   note_exam);
+
+/*16????Să se înscrie o instrucţiune care ar permite mărirea bursei cu 20% pentru acei studenţi care au o sumă a notelor ce depăşeşte 50 puncte.*/
+UPDATE student
+SET    bursa = bursa * 1.2
+WHERE  suma_note > 50;
+
+/*17 Să se formuleze o interogare care ar afişa toată informaţia despre studenţi. */
+SELECT *
+FROM   student;
+
+/*18 Să se formuleze o interogare care ar afişa lista oraşelor în care locuiesc studenţii. */
+SELECT oras
+FROM   student;
+
+/*19 Să se formuleze o interogare care ar afişa numele şi prenumele studenţilor ce au numele Petrov. */
+SELECT nume,
+       prenume
+FROM   student
+WHERE  nume = 'Petrov';
+
+/*20Să se formuleze o interogare care ar afişa lista studenţii din anul trei ce au bursă. */
+SELECT *
+FROM   student
+WHERE  anul = 3
+       AND bursa > 0;
+
+/*21Să se formuleze o interogare care ar afişa identificatorului (codului numeric) cursului, denumirea lui,
+   semestrul în care el este predat precum şi numărul de ore planificat pentru acest curs
+   pentru toate cursurile din tabelul Cursuri.*/
+SELECT curs_id,
+       curs_den,
+       semestru,
+       ore
+FROM   curs;
+
+/*22 Să se formuleze o interogare care ar afişa toate înregistrărilor din tabelul NOTE, pentru cursul cu numărul de identificare egal cu 12.*/
+SELECT *
+FROM   note_exam
+WHERE  curs_id = 12;
+
+/*23 Să se formuleze o interogare care ar afişa informaţia din tabelul STUDENT,
+   ordonînd cîmpurile în felul următor: ANUL, PRENUME, NUME, BURSA.*/
+SELECT anul,
+       prenume,
+       nume,
+       bursa
+FROM   student;
+
+/*24Să se formuleze o interogare care ar afişa denumirea cursului, numărul de ore planificate
+  pentru toate cursurile predate în semestrul patru.*/
+SELECT curs_den,
+       ore
+FROM   curs
+WHERE  semestru = 4;
+
+/* 25Să se formuleze o interogare care ar afişa informaţia din cîmpul NOTE a
+   tabelei NOTE_EXAM pentru fiecare student evitînd duplicatele.*/
+SELECT DISTINCT nota
+FROM   note_exam;
+
+/* 26Să se formuleze o interogare care ar afişa numele studenţilor ce învaţă în anul trei şi mai mare.*/
+SELECT nume
+FROM   student
+WHERE  anul >= 3;
+
+/* 27Să se formuleze o interogare care ar afişa numele, prenumele
+   şi anul de studii a studenţilor ce au bursa mai mare ca 140 lei.*/
+SELECT nume,
+       prenume,
+       anul
+FROM   student
+WHERE  bursa > 140;
+
+/* 28Să se formuleze o interogare care ar afişa lista cursurilor
+   pentru care au fost planificate mai mult de 30 ore.*/
+SELECT *
+FROM   curs
+WHERE  ore > 30;
+
+/*29Să se formuleze o interogare care ar afişa lista universităţilor reitingul cărora depăşeşte 300 puncte.*/
+SELECT *
+FROM   universitate
+WHERE  rating > 300;
+
+/*30Să se formuleze o interogare (la tabela STUDENT) care ar afişa
+  numele,
+  prenumele
+  şi anul de studii a studenţilor
+  ce au bursa egală sau mai mare ca 100 şi care sînt originari din Bălţi.*/
+SELECT nume,
+       prenume,
+       anul
+FROM   student
+WHERE  bursa >= 100
+       AND oras = 'Bălți';
+
+/*31Să se formuleze o interogare care ar afişa numele doar acelor studenţi ce au note de 9 şi 10.*/
+SELECT nume,
+       prenume
+FROM   student
+       INNER JOIN note_exam
+               ON student.st_id = note_exam.st_id
+WHERE  nota IN ( 9, 10 );
+
+/*32Să se formuleze o interogare care ar afişa cursurile pentru
+  care numărul de ore planificate este mai mare ca 30, dar mai mic ca 40. */
+SELECT *
+FROM   curs
+WHERE  ore BETWEEN 31 AND 39;
+
+/*33Să se formuleze o interogare care ar afişa informaţia
+  despre studenţii numele cărora începe cu „P”.*/
+SELECT *
+FROM   student
+WHERE  nume LIKE 'P%';
+
+/*34Să se formuleze o interogare care ar afişa codul numeric al
+  cursurilor examenele cărora au fost promovate între 10 şi 20 ianuarie 1999*/
+SELECT curs_id
+FROM   note_exam
+WHERE  data_exam BETWEEN '1999-01-10' AND '1999-01-20';
+
+/*35Să se formuleze o interogare care ar afişa informaţia despre acele cursuri la care examenele
+  au fost susţinute de către studenţii cu numărul de indetificare 12 şi 32.*/
+SELECT curs.curs_id,
+       curs_den,
+       ore,
+       semestru
+FROM   curs
+       INNER JOIN note_exam NE
+               ON curs.curs_id = NE.curs_id
+WHERE  st_id IN( 12, 32 );
+
+/*36Să se formuleze o interogare care ar afişa lista cursurilor denumirea cărora începe cu „I”.*/
+SELECT *
+FROM   curs
+WHERE  curs_den LIKE 'I%';
+
+/*37Să se formuleze o interogare care ar afişa informaţia despre
+  studenţii la care numele începe cu „I” sau „C”*/
+SELECT *
+FROM   student
+WHERE  nume LIKE 'I%'
+        OR nume LIKE 'C%';
+
+/*38Să se formuleze o interogare care ar afişa înregistrările
+  din tabelul NOTE_EXAM la care lipseşte valoarea pentru cîmpul NOTE.*/
+SELECT *
+FROM   note_exam
+WHERE  Isnull(nota);
+
+/*39Să se formuleze o interogare care ar afişa înregistrările
+  din tabelul NOTE_EXAM la care este specificată valoarea pentru cîmpul NOTE.*/
+SELECT *
+FROM   note_exam
+WHERE ! Isnull(nota);
+
+/*40Să se formuleze o interogare pentru tabela STUDENT astfel încît tabelul
+  rezultat să conţină un cîmp care ar conţine lista valorilor
+  din toate cîmpurile acestei tabele delimitate prin „;”,
+  valorile caracteriale să fie afişate numai cu majuscule,
+  de ex.: 10;Casta;Olga;0;Bălţi;8/12/1981;10.*/
+SELECT Concat_ws(';', st_id, Upper(nume), Upper(prenume), bursa, anul, Upper(
+       oras),
+              Date_format(data_n, '%d/%m/%y'), univ_id) AS RESULTAT
+FROM   student;
+
+/*41Să se formuleze o interogare care ar afişa informaţia din tabelul STUDENT
+astfel încît tabelul rezultat să conţină un singur cîmp ce ar conţine informaţie
+  în următorul format O.CASTA; localitatea – BĂLŢI; născut la 8.12.1981.*/
+SELECT Concat_ws('; ', Concat_ws('.', Upper(LEFT(nume, 1)), Upper(prenume)),
+              Concat_ws('localitatea - ', Upper(oras)),
+              Concat('născut la ', Date_format(data_n, '%d.%m.%y'), '.')) AS
+       INFO
+FROM   student;
+
+/*42Să se formuleze o interogare care ar afişa informaţia din tabelul STUDENT
+  astfel încît tabelul rezultat să conţină un singur cîmp ce ar conţine informaţie
+  în următorul format o.casta; localitatea – bălţi; născut la 8-dec-1981.*/
+SELECT Concat_ws('; ', Concat_ws('.', Lower(LEFT(nume, 1)), Lower(prenume)),
+              Concat_ws('localitatea - ', Lower(oras)),
+              Concat('născut la ', Lower(Date_format(data_n, '%d-%b-%y')), '.')
+       ) AS
+       INFO
+FROM   student;
+
+/*43Să se formuleze o interogare care ar afişa din tabelul
+  STUDENT astfel încît tabelul rezultat să conţină un singur cîmp ce ar conţine
+  informaţie în următorul format Olga Casta s-a născut în anul 1981.*/
+SELECT Concat(prenume, ' ', nume, ' s-a născut în anul ', Year(data_n)) AS
+       INFO
+FROM   student;
+
+/*44 La punctul precedent mai apare o condiţie: studenţii trebuie să fie din anul 1, 2 sau 4.*/
+SELECT Concat(prenume, ' ', nume, ' s-a născut în anul ', Year(data_n)) AS
+       INFO
+FROM   student
+WHERE  anul IN ( 1, 2, 4 );
+
+/* 45 Să se formuleze o interogare care ar afişa numele studenţilor
+   ce au bursă, precum şi bursă mărită de 100 de ori.*/
+SELECT nume,
+       bursa,
+       bursa * 100 AS bursa_marita
+FROM   student
+WHERE  bursa > 0;
+
+/* 46Să se formuleze o interogare care ar afişa pentru tabelul UNIVERSITATE
+   astfel încît tabele rezultat ar conţine un singur cîmp
+   cu următorul format: Cod-10; USB-or.Bălţi; Reiting-296.*/
+SELECT Concat('Cod-', univ_id, '; ', univ_den, '; Reiting-', rating, '.') AS
+       Result
+FROM   universitate;
+
+/*47În punctul precedent mai apare o condiţie: valoarea reitingului trebuie aproximată la primul simbol.*/
+SELECT Concat('Cod-', univ_id, '; ', univ_den, '; Reiting-', Round(rating / 100)
+       , '.')
+       AS Result
+FROM   universitate;
+
+/*48Să se formuleze o interogare care ar determina nota medie a tuturor studenţilor.*/
+SELECT Avg(nota) AS "Nota medie"
+FROM   note_exam;
+
+/*49Să se formuleze o interogare care ar determina despre cîţi studenţi se păstrează informaţia.*/
+SELECT Count(*) AS "Numar de studenti"
+FROM   student;
+
+/*50Să se formuleze o interogare care ar determina nota maximă primită de fiecare student.*/
+SELECT st_id,
+       Max(nota) AS NOTA_MAXIMA
+FROM   note_exam
+GROUP  BY st_id;
+
+/*51Să se formuleze o interogare care ar determina
+  numărul de studenţi  care au susţinut examen la cursul cu numărul de identificare 20.*/
+SELECT Count(*) AS NrStud
+FROM   note_exam
+WHERE  curs_id = 20;
+
+/*52Să se înscrie o interogare care ar calcula numărul de cursuri diferite
+  după tabelul NOTE_EXAM.*/
+SELECT Count(DISTINCT curs_id) AS NrCurs
+FROM   note_exam;
+
+/*53Să se formuleze o interogare care ar afişa identificatorul studentului şi nota lui minimală.*/
+SELECT st_id,
+       Min(nota)
+FROM   note_exam
+GROUP  BY st_id;
+
+/*54Să se formuleze o interogare care ar afişa
+  primul studentul (după ordinea alfabetică) numele căruia începe cu „I”.*/
+SELECT *
+FROM   student
+WHERE  nume LIKE 'I%'
+ORDER  BY nume
+LIMIT  1;
+
+/*55Să se formuleze o interogare care ar afişa denumirea cursului (pentru fiecare curs)
+  şi numărul maximal al semestrului în care a fost predat acest curs.*/
+SELECT curs_den,
+       Max(semestru) AS MAX_SEMESTRU
+FROM   curs
+GROUP  BY curs_den;
+
+/*56Să se formuleze o interogare care ar afişa pentru fiecare dată de promovare
+  a examenului numărul de studenţi care au susţinut acest examen.*/
+SELECT data_exam,
+       Count(DISTINCT st_id) AS NUMAR_STUDENTI
+FROM   note_exam
+GROUP  BY data_exam;
+
+/*57Să se formuleze o interogare care ar nota medie pentru
+  fiecare an de studii pentru fiecare curs.*/
+SELECT anul,
+       curs_den,
+       Avg(nota) AS NOTA_MEDIE
+FROM   student
+       JOIN note_exam
+         ON student.st_id = note_exam.st_id
+       JOIN curs
+         ON note_exam.curs_id = curs.curs_id
+GROUP  BY anul,
+          curs_den;
+
+/*58Să se formuleze o interogare care ar determina
+  nota medie pentru fiecare student.*/
+SELECT st_id,
+       Avg(nota) AS NOTA_MEDIE
+FROM   note_exam
+GROUP  BY st_id;
+
+/*59Să se formuleze o interogare care ar determina nota medie pentru fiecare examen.*/
+SELECT exam_id,
+       Avg(nota) AS NOTA_MEDIE
+FROM   note_exam
+GROUP  BY exam_id;
+
+/*60Să se formuleze o interogare care ar determina pentru
+  fiecare examen numărul de studenţi ce l-au susţinut.*/
+SELECT curs_id,
+       Count(*) AS NUMAR_STUDENTI
+FROM   note_exam
+GROUP  BY curs_id;
+
+/*61Să se formuleze o interogare care ar determina pentru fiecare an
+  de studii numărul de cursuri studiate pe parcursul acestui an.*/
+SELECT s.anul,
+       Count(DISTINCT ne.curs_id) AS NrCursuri
+FROM   student s
+       JOIN note_exam ne
+         ON s.st_id = ne.st_id
+GROUP  BY s.anul
+ORDER  BY s.anul;
+
+/*62Să presupunem că a fost mărită bursa cu 20%.
+  Să se proiecteze o interogare la tabelul STUDENT,
+  care ar afişa identificatorul studentului,
+  numele lui şi bursa mărită. Datele afişate trebuie ordonate:
+  a) după bursă; b) în ordinea alfabetică a numelui studenţilor.*/
+SELECT st_id,
+       nume,
+       bursa * 1.2 AS BURSA_MARITA
+FROM   student
+ORDER  BY bursa_marita DESC,
+          nume ASC;
+
+/*63Să se formuleze o interogare care pentru fiecare student
+  să se determine din tabelul NOTE_EXAM nota maximală
+  şi nota minimală şi să le afişeze împreună
+  cu identificatorul studentului.*/
+SELECT st_id,
+       Max(nota) AS nota_maxima,
+       Min(nota) AS nota_minima
+FROM   note_exam
+GROUP  BY st_id;
+
+/*64Să se formuleze o interogare care ar afişa lista
+  cursurilor studiate afişate în ordinea descreşterii
+  semestrelor şi în ordinea crescătoare a numărului
+  de ore planifice pentru cursul respectiv.
+  În tabelul rezultat cîmpul numărul semestrului trebuie
+  să fie primul, după care denumirea şi identificatorul cursului.*/
+SELECT semestru,
+       curs_den,
+       curs_id,
+       ore
+FROM   curs
+WHERE  curs_id IN (SELECT DISTINCT note_exam.curs_id
+                   FROM   note_exam)
+ORDER  BY semestru DESC,
+          ore ASC;
+
+/*65Să se formuleze o interogare care ar afişa valoarea medie,
+  minimală şi maximală a notelor studenţilor pentru fiecare
+  dată de susţinerea a examenului şi prezintă rezultatele
+  în ordinea descrescătoare a acestor valori.*/
+SELECT data_exam,
+       Avg(nota) AS nota_medie,
+       Min(nota) AS nota_minima,
+       Max(nota) AS nota_maxima
+FROM   note_exam
+GROUP  BY data_exam
+ORDER  BY nota_medie DESC,
+          nota_minima ASC,
+          nota_maxima ASC;
+
+/*66Să se  proiecteze o interogare cu subinterogare
+  care ar afişa notele primite de către studentul
+  cu numele „Popescu”. Presupunem că nu este cunoscut
+  identificatorul acestui student.*/
+SELECT nota
+FROM   note_exam
+WHERE  st_id = (SELECT student.st_id
+                FROM   student
+                WHERE  nume = 'Popescu');
+
+/*67Să se formuleze o interogare care ar afişa numele studenţilor
+  care au primit la cursul cu identificatorul 101 o notă mai mare
+  decît nota medie generală.*/
+SELECT nume,
+       prenume
+FROM   student
+WHERE  st_id IN (SELECT note_exam.st_id
+                 FROM   note_exam
+                 WHERE  curs_id = 101
+                        AND nota > (SELECT Avg(nota)
+                                    FROM   note_exam));
+
+/*68Să se formuleze o interogare care ar afişa numele studenţilor
+  care au primit la cursul cu identificatorul 101
+  o notă mai mare decît nota medie generală.*/
+SELECT s.nume
+FROM   student s
+       INNER JOIN note_exam n
+               ON s.st_id = n.st_id
+WHERE  n.curs_id = 101
+       AND n.nota > (SELECT Avg(nota)
+                     FROM   note_exam);
+
+/*69Să se formuleze o interogare care ar afişa numele
+  studenţilor care au primit la cursul cu identificatorul 102
+  o notă mai mică decît nota medie generală.*/
+SELECT s.nume
+FROM   student s
+       INNER JOIN note_exam n
+               ON s.st_id = n.st_id
+WHERE  n.curs_id = 102
+       AND n.nota < (SELECT Avg(nota)
+                     FROM   note_exam);
+
+/*70Să se formuleze o interogare care ar afişa numărul
+  de cursuri la care a fost examinaţi studenţi ce
+  au susţinut mai mult de 20 de examene.*/
+SELECT Count(DISTINCT curs_id) AS Numar_Cursuri_Examinate
+FROM   note_exam
+WHERE  st_id IN (SELECT st_id
+                 FROM   note_exam
+                 GROUP  BY st_id
+                 HAVING Count(DISTINCT st_id) > 20);
+
+/*71Să se formuleze o interogare care ar afişa numele şi
+  identificatorul studenţilor la care bursa este
+  cea mai mare dintre bursele primite de studenţii din
+  acelaşi oraş.*/
+SELECT s.nume,
+       s.st_id
+FROM   student s
+WHERE  s.bursa = (SELECT Max(s1.bursa)
+                  FROM   student s1
+                  WHERE  s1.oras = s.oras);
+
+/*72Să se formuleze o interogare care ar afişa numele şi
+  identificatorul studenţilor despre care se ştie
+  că locuiesc într-un alt oraş de universitatea unde învaţă. */
+SELECT s.st_id,
+       s.nume
+FROM   student s
+       INNER JOIN universitate u
+               ON s.univ_id = u.univ_id
+WHERE  s.oras <> u.oras;
+
+/*73Să se formuleze o interogare
+  care ar determina numele studenţilor ce au obţinut
+  cel puţin o notă negativă.*/
+SELECT DISTINCT s.nume,
+                s.prenume
+FROM   student AS s
+       JOIN note_exam
+         ON s.st_id = note_exam.st_id
+WHERE  note_exam.nota < 5;
+
+/*74Să se formuleze o interogare care ar determina identificatorul
+  cursurilor examenul la care a fost susţinut nu de un student
+  ci de cîţiva.*/
+SELECT DISTINCT curs_id
+FROM   note_exam
+GROUP  BY curs_id
+HAVING Count(DISTINCT st_id) > 1;
+
+/*75Să se formuleze o interogare care ar afişa identificatorul
+  studenţilor ce au susţinut mai mult de un examen.
+*/
+SELECT st_id
+FROM   note_exam
+WHERE  nota > 0
+GROUP  BY st_id
+HAVING Count(DISTINCT curs_id) > 1;
+
+/*76Să se formuleze o interogare care ar afişa studenţii ce studiază în
+  universitate reitingul căreia este mai mare de 300.*/
+SELECT s.nume,
+       s.st_id
+FROM   student AS s
+       JOIN universitate
+         ON s.univ_id = universitate.univ_id
+WHERE  universitate.rating > 300;
+
+/*77Să se formuleze o interogare care ar afişa lista studenţilor
+  care locuiesc în oraş unde este universitate,
+  dar care nu învaţă în aceasă universitate.*/
+SELECT s.st_id,
+       s.nume,
+       s.prenume,
+       s.oras,
+       u.oras,
+       s.univ_id,
+       u.univ_id
+FROM   student s
+       JOIN universitate u
+         ON s.oras = u.oras
+WHERE  u.oras = s.oras;
+
+/*78Să se formuleze o interogare pe baza tabelului CURS care
+  ar afişa lista cursurilor examenele la care au fost
+  susţinute cel puţin de un student.*/
+SELECT DISTINCT curs_id
+FROM   note_exam
+WHERE  st_id IN (SELECT DISTINCT st_id
+                 FROM   note_exam);
+
+/*79Să se formuleze o interogare care ar afişa informaţia despre
+  studenţii care învaţă la universitatea din oraşul în
+  care locuiesc.*/
+SELECT s.st_id,
+       s.nume,
+       s.prenume
+FROM   student s
+       JOIN universitate u
+         ON s.oras = u.oras
+            AND s.univ_id = u.univ_id;
+
+/*80Să se formulze o interogare care ar afişa identificatorii
+  studenţilor ce au note care sunt mai mari cel puţin de
+  o notă obţinută de ei primite pe 6 decembrie 1999.*/
+SELECT DISTINCT ne1.st_id
+FROM   note_exam ne1
+WHERE  ne1.nota >= any (SELECT ne2.nota
+                        FROM   note_exam ne2
+                        WHERE  ne2.st_id = ne1.st_id
+                               AND ne2.data_exam = '1999-12-06');
+
+/*81Să se formuleze o interogare care ar afişa lista universităţilor
+  cu un reiting mai mare decît reitingului oricărei
+  universităţi din Bălţi.*/
+SELECT *
+FROM   universitate
+WHERE  rating > (SELECT Max(rating)
+                 FROM   universitate
+                 WHERE  oras = 'Bălți');
+
+/*82Să se formulze o interogare care ar selecta informaţia despre
+  universităţile cu un reiting egal sau mai mare
+  ca reitingul USB Bălţi.*/
+SELECT *
+FROM   universitate
+WHERE  rating >= (SELECT rating
+                  FROM   universitate
+                  WHERE  univ_den = 'USB'
+                         AND oras = 'Bălți')
+       AND univ_den <> 'USB';
+
+/*83Să se formulze o interogare care ar selecta informaţia
+  despre studenţii la care în oraşul unde locuies
+  nu este nici o universitate.*/
+SELECT *
+FROM   student
+WHERE  oras NOT IN (SELECT oras
+                    FROM   universitate);
+
+/*84Să se formulze o interogare pe baza tabelei NOTE_EXAM care ar afişa denumirea
+  cursurilor la care valoarea cîmpului NOTE depăşeşte orice valoare
+  a aceluiaşi cîmp pentru cursul cu identificatorul egal cu 105.*/
+SELECT DISTINCT C.curs_den
+FROM   curs C
+       INNER JOIN note_exam N
+               ON C.curs_id = N.curs_id
+WHERE  N.nota > (SELECT Max(nota)
+                 FROM   note_exam
+                 WHERE  curs_id = 105);
+
+/*85Să se formuleze o interogare care ar afişa numele studentului ce a susţinut examenul precum şi identificatorul cursului la care a susţinut examenul.*/
+SELECT s.nume     AS Student,
+       ne.curs_id AS Course_ID
+FROM   note_exam ne
+       JOIN student s
+         ON ne.st_id = s.st_id
+WHERE  ne.nota > 4;
+
+/*86Să se formulze o interogare care ar afişa informaţia despre toţi studenţii, iar pentru cei ce au susţinut examen – identificatorul cursului.*/
+SELECT student.*,
+       note_exam.curs_id
+FROM   student
+       LEFT JOIN note_exam
+              ON student.st_id = note_exam.st_id;
+
+/*
+  87Să se formulze o interogare care ar afişa numele tuturor studenţilor care au încercat să susţină examen, precum şi denumirea cursului.*/
+SELECT student.nume,
+       student.prenume,
+       curs.curs_den
+FROM   student
+       INNER JOIN note_exam
+               ON student.st_id = note_exam.st_id
+       INNER JOIN curs
+               ON note_exam.curs_id = curs.curs_id;
+
+/*88Să se formuleze o interogare care ar afişa denumirea cursurilor la studenţii au primit note bune (8,9 şi 10). Tabelul rezultat trebuie să conţină numele studenţilor, denumirea cursului şi nota primită.*/
+SELECT student.nume,
+       student.prenume,
+       curs.curs_den,
+       note_exam.nota
+FROM   student
+       INNER JOIN note_exam
+               ON student.st_id = note_exam.st_id
+       INNER JOIN curs
+               ON note_exam.curs_id = curs.curs_id
+WHERE  note_exam.nota >= 8;
+
+/*89Să se formuleze o interogare care pentru fiecare student ar afişa lista cursurilor la care studentul a obţinut note de 9 şi 10.*/
+SELECT student.nume,
+       student.prenume,
+       curs.curs_den,
+       note_exam.nota
+FROM   student
+       INNER JOIN note_exam
+               ON student.st_id = note_exam.st_id
+       INNER JOIN curs
+               ON note_exam.curs_id = curs.curs_id
+WHERE  note_exam.nota >= 9
+GROUP  BY student.nume,
+          student.prenume,
+          note_exam.nota,
+          curs.curs_den;
+
+/*90Să se formuleze o interogare care ar afişa denumirea cursurilor la studenţii au primit note bune (8,9 şi 10). Tabelul rezultat trebuie să conţină numele studenţilor, denumirea cursului şi nota primită.*/
+SELECT s.nume,
+       s.prenume,
+       c.curs_den,
+       n.nota
+FROM   student s
+       INNER JOIN note_exam n
+               ON s.st_id = n.st_id
+       INNER JOIN curs c
+               ON n.curs_id = c.curs_id
+WHERE  n.nota >= 8
+ORDER  BY s.nume,
+          c.curs_den;
+
+/*91Să se formuleze o interogare care ar afişa lista universităţilor cu un reiting mai mare de 300, împreună cu valoarea maximală a bursei primită de studenţii acestor universităţi.*/
+SELECT universitate.univ_den,
+       Max(student.bursa) AS BursaMaxima
+FROM   universitate
+       JOIN student
+         ON universitate.univ_id = student.univ_id
+WHERE  universitate.rating > 300
+GROUP  BY universitate.univ_den;
+
+/*92Să se formuleze o interogare pentru afişarea listei studenţilor (în ordinea alfabetică) împreună cu reitingul universităţii unde învaţă, incluzînd în listă şi acei studenţi care în baza de date nu este indicată universitatea unde îşi face studiile.*/
+SELECT s.nume,
+       u.rating
+FROM   student s
+       LEFT JOIN universitate u
+              ON s.univ_id = u.univ_id
+ORDER  BY s.nume ASC;
+
+/*93Să se formuleze o interogare care ar afişa  numele studenţilor cu acelaşi prenume.*/
+SELECT s1.nume,
+       s1.prenume,
+       s2.nume,
+       s2.prenume
+FROM   student s1
+       JOIN student s2
+         ON s1.prenume = s2.prenume
+            AND s1.nume != s2.nume
+ORDER  BY s1.prenume,
+          s1.nume;
+
+/*94Să se formuleze o interogare care ar afişa toate perechile de nume a studenţilor care locuiesc în acelaşi oraş, cu excepţia combinaţiei numelui studenţilor cu ei înseşi (Popescu – Popescu) şi a combinaţiilor ce diferă după ordinea numelor (Popescu – Ionescu sau Ionescu – Popescu).
+*/
+SELECT DISTINCT s1.nume,
+                s1.prenume,
+                s2.nume,
+                s2.prenume
+FROM   student s1,
+       student s2
+WHERE  s1.oras = s2.oras
+       AND s1.st_id < s2.st_id
+       AND s1.nume < s2.nume;
+
+/*95Să se formuleze o interogare care ar afişa lista tuturor perechilor de denumiri de universităţi care se află în acelaşi oraş.*/
+SELECT DISTINCT U1.univ_den AS universitate1,
+                U2.univ_den AS universitate2
+FROM   universitate U1,
+       universitate U2
+WHERE  U1.oras = U2.oras
+       AND U1.univ_den < U2.univ_den
+ORDER  BY U1.univ_den,
+          U2.univ_den;
+
+/*96Să se formuleze o interogare care permite vizualizarea denumirii universităţilor şi oraşelor unde se află aceste universităţi pentru care reitingul este egal sau depăşeşte reitingul universităţii din Bălţi.*/
+SELECT U1.univ_den,
+       U1.oras,
+       U1.rating
+FROM   universitate U1
+WHERE  U1.rating >= (SELECT U2.rating
+                     FROM   universitate U2
+                     WHERE  U2.oras = 'Drochia'); 
